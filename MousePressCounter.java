@@ -8,9 +8,16 @@ import javax.swing.event.*;
  * 
  * @author Jim Teresco
  * @author Ira Goldstein
+ * @author Ben, Freya
  * @version Spring 2025
  */
-public class MousePressCounter implements Runnable, MouseListener, MouseMotionListener, MouseWheelListener {
+public class MousePressCounter extends MouseAdapter implements Runnable, ActionListener {
+
+    private int clickTracker = 0;
+    private String toDisplay;
+    private JPanel panel;
+    private JButton button;
+
 
 	/**
 	 * The run method to set up the graphical user interface
@@ -25,15 +32,14 @@ public class MousePressCounter implements Runnable, MouseListener, MouseMotionLi
 
 		// construct an anonymous class that extends JPanel,
 		// for which we override the paintComponent method
-		JPanel panel = new JPanel() {
+		panel = new JPanel() {
 			@Override
 			public void paintComponent(Graphics g) {
 
 				super.paintComponent(g);
 
 				FontMetrics fm = g.getFontMetrics();
-
-				String toDisplay = "Mouse Around and See!";
+				toDisplay = "Mouse press count: " + clickTracker;
 				int stringWidth = fm.stringWidth(toDisplay);
 				int stringAscent = fm.getAscent();
 
@@ -43,7 +49,15 @@ public class MousePressCounter implements Runnable, MouseListener, MouseMotionLi
 				g.drawString(toDisplay, xStart, yStart);
 			}
 		};
-		frame.add(panel);
+
+        JPanel panelTWOOOOO = new JPanel(new BorderLayout());
+
+
+        button = new JButton("Reset");
+        panelTWOOOOO.add(panel, BorderLayout.CENTER);
+        panelTWOOOOO.add(button, BorderLayout.SOUTH);        
+        button.addActionListener(this);
+        frame.add(panelTWOOOOO);
 		panel.addMouseListener(this);
 		panel.addMouseMotionListener(this);
 		panel.addMouseWheelListener(this);
@@ -53,45 +67,22 @@ public class MousePressCounter implements Runnable, MouseListener, MouseMotionLi
 		frame.setVisible(true);
 	}
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		System.out.println("mouseClicked: " + e);
-	}
+
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("mousePressed: " + e);
+		clickTracker++;
+        panel.repaint();
 	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		System.out.println("mouseReleased: " + e);
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		System.out.println("mouseEntered: " + e);
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		System.out.println("mouseExited: " + e);
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		System.out.println("mouseDragged: " + e);
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		System.out.println("mouseMoved: " + e);
-	}
-
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		System.out.println("mouseWheelMoved: " + e);
-	}
+	
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // if button 1 is clicked, Print pressed A and increment the A label number
+        if (e.getSource() == button) {
+            clickTracker = 0;
+            panel.repaint();
+        }
+    }
 
 	public static void main(String args[]) {
 		javax.swing.SwingUtilities.invokeLater(new MousePressCounter());
