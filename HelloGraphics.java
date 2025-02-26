@@ -6,6 +6,7 @@ import javax.swing.*;
  * 
  * @author Jim Teresco
  * @author Ira Goldstein
+ * @author Freya Downey and Benjamin Antoniuk
  * @version Spring 2025
  */
 
@@ -19,11 +20,15 @@ class GraphicsPanel extends JPanel {
         // first, we should call the paintComponent method we are
         // overriding in JPanel
         super.paintComponent(g);
+        g.setFont(new Font("Comic Sans MS", 2, 22));
+        String str = "Hello, Java Graphics World!";
+        int y = (getHeight() - g.getFontMetrics().getAscent()) / 2;
+        int x = (getWidth() - g.getFontMetrics().stringWidth(str)) / 2;
 
         // the Graphics object passed to this method has many methods
         // we can use to draw in the area of the panel, one of which
         // allows us to draw a String at a given x,y position
-        g.drawString("Hello, Java Graphics World!", 0, 20);
+        g.drawString(str, x, y);
     }
 }
 
